@@ -11,7 +11,7 @@ module Datapath (input clk,rst,output [5:0]Opcode,Function,output  Zero
   wire [4:0] Exe_Dest,Mem_Dest,Rt,Rd,Rs,write_reg_wb;
   wire [31:0] _datareg1,_datareg2,res,res_out,A,B_in,B,store_data,mem_out,read_data,result;
   wire [5:0] prev_command;
-
+  // 32 proc
   //IF stage
   Pcreg pc_reg(clk,rst,freeze,pc_in,pc_out);
   memoryInstructor mem_ins(pc_out,If_out);
