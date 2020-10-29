@@ -1,5 +1,4 @@
-module Datapath (input clk, rst, output[5:0] Opcode, Function, output  Zero
-,input pcCondition, [1:0]Flush);
+module Datapath (input clk, rst, output[5:0] Opcode, Function,[1:0]Flush);
 
   wire zero,freeze,stall,Forw_unit;
   wire [31:0] sub_reg,ext_offset,offset_out;
@@ -32,7 +31,7 @@ module Datapath (input clk, rst, output[5:0] Opcode, Function, output  Zero
   assign Opcode = command[31:26];
   assign Function =command[5:0];
   assign sub_reg = datareg1 - datareg2;
-  assign Zero = (sub_reg == 32'b0) ? 1'b1 : 1'b0;
+  //assign Zero = (sub_reg == 32'b0) ? 1'b1 : 1'b0;
   
   assign pc_branch = 32'b011;
 
