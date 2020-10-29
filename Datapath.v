@@ -1,5 +1,5 @@
 module Datapath (input clk, rst, output[5:0] Opcode, Function, output  Zero
-,input pcCondition, [1:0]Flush, input R_branch, input [1:0] pcSrc, writeBack, memorySignals, input[4:0] excutionSignals);
+,input pcCondition, [1:0]Flush);
 
   wire zero,freeze,stall,Forw_unit;
   wire [31:0] sub_reg,ext_offset,offset_out;
@@ -27,7 +27,7 @@ module Datapath (input clk, rst, output[5:0] Opcode, Function, output  Zero
  
  
   //hazard unit
-  Hazard_Unit hazard_unit(command[20:16],command[25:21],Exe_Dest,mem_exe[1],R_branch,stall,freeze);
+  Hazard_Unit hazard_unit(command[20:16],command[25:21],Exe_Dest,mem_exe[1],1'b0,stall,freeze);
   
   assign Opcode = command[31:26];
   assign Function =command[5:0];
