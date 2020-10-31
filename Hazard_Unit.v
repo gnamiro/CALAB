@@ -1,4 +1,8 @@
-module Hazard_Unit(input [4:0] Rt, Rs, Exe_Dest, input exe_read_mem, R_branch, output nop, freeze);
+module Hazard_Unit(
+      ///input [4:0] Rt, Rs, Exe_Dest,
+      //input exe_read_mem, R_branch,
+      output nop,
+      output freeze);
 
     // wire src2_is_valid, hazard;
     // assign src2_is_valid =  R_branch;
