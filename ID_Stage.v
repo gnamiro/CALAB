@@ -1,38 +1,48 @@
 module ID_Stage (
     input clk, rst,
-    // input write_reg_wb, write_data, write_en
-    // input [31 : 0] instruction,
-    // input [5:0] Exe_Dest,
-    // input [1:0] mem_exe,
-    // input [5:0] excutionSignals,
-    // input [1:0] writeBack, memorySignals,
-    // output [31 : 0] datareg1, datareg2,
-    // output reg [5:0] stall_exe,
-    // output reg [1:0] stall_wb, stall_mem,
+    input  WB_EN,
     input [31:0] instruction,
-    output freeze,
+    input Freeze,
+    input [3:0] Sr, WB_DES,
+    input [31:0] WB_Value,
     output flush,
-    // output [5:0] Opcode, Function,
-    output [24:0] Signed_imm_24
+    output [23:0] Signed_imm_24,
+    output[11:0] shift_operand,
+    output imm,
+    output [31:0] Val_Rn, Val_Rm,
+    output [8:0] controllerRes,
+    output [3:0] Dest
 );
 
-wire stall;
-//regFile reg_file(clk, write_en, instruction[25:21], instruction[20:16], write_reg_wb, write_data, datareg1, datareg2);
+wire [3:0] Cond;
+wire S;
+wire [3:0] Op_Code;
+wire [1:0] Mode;
+wire [8:0] _controllerRes;
+
+wire condRes, notCondRes, controllerSelector;
+
+assign Cond = instruction[31:28];
+assign imm = instruction[25];
+assign S = instruction[20];
+assign Op_Code = instruction[24:21];
+assign Mode = instruction[27:26];
+assign Signed_imm_24 = instruction[23:0];
+assign shift_operand = instruction[11:0];
+assign Dest = instruction[15:12];
+wire [3:0] src1, src2;
+assign src1 = instruction[19:16];
+
+Controller cu(.Mode(Mode), .Op_Code(Op_Code), .S(S), .controllerRes(_controllerRes));
+ConditionCheck condCheck(.cond(Cond), .Sr(Sr), .condRes(condRes));
+
+Mux2 #(4) src2Mux(instruction[15:12], instruction[3:0], controllerRes[6], src2);
 
 
-//hazard unit
-//Hazard_Unit hazard_unit(instruction[20:16], instruction[25:21], Exe_Dest, mem_exe, 1'b0, stall, freeze);
-  Hazard_Unit hazard_unit(.nop(stall), .freeze(freeze));
-  Controller controller(.flush(flush));
-//assign Opcode = instruction[31:26];
-//assign Function = instruction  [5:0];
-//assign sub_reg = datareg1 - datareg2;
-//assign Zero = (sub_reg == 32'b0) ? 1'b1 : 1'b0;
-assign Signed_imm_24 = 25'b011;
+assign notCondRes = ~condRes;
+assign controllerSelector = notCondRes | Freeze;
 
-//Mux2 #(5) cont_exe(excutionSignals, 5'b0, stall,stall_exe);
-//Mux2 #(2) cont_wb(writeBack, 2'b0, stall, stall_wb);
-//Mux2 #(2) cont_mem(memorySignals, 2'b0, stall, stall_mem);
-
-
+Mux2 #(9) controllerMux(_controllerRes, 9'b0, controllerSelector, controllerRes);
+RegisterFile ut(.clk(clk), .rst(rst), .writeBackEn(writeBackEn), .src1(src1), .src2(src2), .Dest_wb(WB_DES), .Result_WB(WB_Value), .reg1(Val_Rn), .reg2(Val_Rm));
+assign flush = 1'b0;
 endmodule

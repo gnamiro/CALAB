@@ -9,7 +9,6 @@ module Mem (
     always@ (*) begin
         if (rst) begin
             $readmemb("Instructions.mem", ROM);
-            $readmemb("Data.mem", RAM);
         end
         else begin
             if (in_addr < 32'd1024) begin
