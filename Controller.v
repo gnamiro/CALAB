@@ -9,6 +9,7 @@ reg B, MEM_W_EN, MEM_R_EN, WB_EN;
 reg [3:0] EXE_CMD;
 
 always@ (*) begin
+  {WB_EN, MEM_R_EN, MEM_W_EN, EXE_CMD, B} = 0;
   case (Mode)
     2'b00: begin // arithmatic
       B = 1'b0;

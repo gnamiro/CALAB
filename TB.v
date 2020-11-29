@@ -1,8 +1,8 @@
 module TB();
-  reg clk=0,rst=0;
+  reg clk=0, rst=0;
   Top tp(clk, rst);
-  always begin #20 clk=~clk;end
+  always begin #40 clk=~clk;end
 
   initial begin rst=1;
-  #40;rst=0;  #100000; $stop; end
+  #20;rst=0;  #100000; $stop; end
 endmodule

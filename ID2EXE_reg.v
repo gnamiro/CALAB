@@ -6,6 +6,7 @@ module ID2EXE_reg(
   input [3:0] EXE_CMD_IN,
   input [31:0] PC_IN, Val_Rn_IN, Val_Rm_IN,
   input imm_IN,
+  input [3:0] statusRegs_IN,
   input [11:0] Shift_operand_IN,
   input [23:0] Signed_imm_24_IN,
   input [3:0] Dest_IN,
@@ -15,6 +16,7 @@ module ID2EXE_reg(
   output reg [3:0] EXE_CMD,
   output reg  [31:0] PC, Val_Rn, Val_Rm,
   output reg imm,
+  output reg[3:0] statusRegs_OUT,
   output reg [11:0] Shift_operand,
   output reg [23:0] Signed_imm_24,
   output reg [3:0] Dest
@@ -32,6 +34,7 @@ module ID2EXE_reg(
           Shift_operand <= 0;
           Signed_imm_24 <= 0;
           Dest <= 0;
+          statusRegs_OUT <= 4'b1110;
         end
         else begin
             Signed_imm_24 <= Signed_imm_24_IN;
@@ -48,6 +51,7 @@ module ID2EXE_reg(
             Shift_operand <= Shift_operand_IN;
             Signed_imm_24 <= Signed_imm_24_IN;
             Dest <= Dest_IN;
+            statusRegs_OUT <= statusRegs_IN;
 
             if (flush) begin
                 PC <= 0;

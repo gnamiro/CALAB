@@ -6,7 +6,7 @@ module Pcreg (
   //reg [31:0]pc ;
   always@ (posedge clk, posedge rst) begin
     if (rst) begin
-        pcout <= 32'b0;
+        pcout <= -32'd1;
     end else begin
       if (~freeze) begin
             pcout <= pcin;

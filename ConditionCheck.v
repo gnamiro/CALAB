@@ -3,6 +3,6 @@ module ConditionCheck(
   output condRes
 );
 
-assign condRes = 1'b0;
+assign condRes = cond == 4'b1110 ? 1'b1 : cond == Sr ? 1'b1 : 1'b0;
 
 endmodule

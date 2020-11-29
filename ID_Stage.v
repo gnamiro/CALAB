@@ -36,13 +36,11 @@ assign src1 = instruction[19:16];
 Controller cu(.Mode(Mode), .Op_Code(Op_Code), .S(S), .controllerRes(_controllerRes));
 ConditionCheck condCheck(.cond(Cond), .Sr(Sr), .condRes(condRes));
 
-Mux2 #(4) src2Mux(instruction[15:12], instruction[3:0], controllerRes[6], src2);
-
-
-assign notCondRes = ~condRes;
-assign controllerSelector = notCondRes | Freeze;
+// assign notCondRes = ~condRes;
+assign controllerSelector = condRes | Freeze;
 
 Mux2 #(9) controllerMux(_controllerRes, 9'b0, controllerSelector, controllerRes);
+Mux2 #(4) src2Mux(instruction[15:12], instruction[3:0], controllerRes[6], src2);
 RegisterFile ut(.clk(clk), .rst(rst), .writeBackEn(writeBackEn), .src1(src1), .src2(src2), .Dest_wb(WB_DES), .Result_WB(WB_Value), .reg1(Val_Rn), .reg2(Val_Rm));
 assign flush = 1'b0;
 endmodule

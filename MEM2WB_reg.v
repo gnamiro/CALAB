@@ -1,31 +1,27 @@
+`timescale 1ns / 1ns
+
 module MEM2WB_reg(
   input clk, rst,
-  input [31:0] next_pc_in, instruction_in,
-  output reg [31:0] next_pc, instruction
-);
-  // input [31:0]result, read_data, input [4:0]reg_dst
-                // ,input [1:0] write_back_signal
-                // ,output reg [31:0]Read_data,Result
-                // ,output reg [4:0]Reg_Dst
-                // ,output reg [1:0] Write_back_signal);
+  input WB_EN_IN, MEM_R_EN_IN,
+  input [31:0] ALURes_IN, MEM_Res_IN,
+  input [3:0]  Dest_IN,
+  output reg [31:0] ALURes, MEM_Res_OUT,
+  output reg [3:0] Dest,
+  output reg MEM_R_EN, WB_EN
+  );
 
-    always@(posedge clk, posedge rst) begin
+
+
+    always @ (posedge clk, posedge rst) begin
         if (rst) begin
-            // Read_data <= 32'b0;
-            // Result <= 32'b0;
-            // Reg_Dst <= 5'b0;
-            // Write_back_signal <= 2'b0;
-            next_pc <= 0;
-            instruction <= 0;
+            {ALURes, Dest, MEM_R_EN, WB_EN, MEM_Res_OUT} = 0;
         end
         else begin
-            // Read_data <= read_data;
-            // Result <= result;
-            // Reg_Dst <= reg_dst;
-            // Write_back_signal <= write_back_signal;
-            next_pc <= next_pc_in;
-            instruction <= instruction_in;
+            ALURes <= ALURes_IN;
+            Dest <= Dest_IN;
+            MEM_R_EN <= MEM_R_EN_IN;
+            WB_EN <= WB_EN_IN;
+            MEM_Res_OUT <= MEM_Res_IN;
         end
     end
-
 endmodule
