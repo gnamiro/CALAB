@@ -34,7 +34,7 @@ Val2_Gen val2Gen(.Val_Rm(Val_Rm), .Shift_operand(Shift_operand), .imm(imm), .val
 ALU alu (.flush(flush), .statusRegs_IN(statusRegs_IN), .controller_command(EXE_CMD), .A(Val_Rn), .B(val2GenOut), .res(res), .Status_values(status_values));
 StatusRegister statusReg(.clk(clk), .rst(rst), .Status_values(status_values), .S(S), .StatusRegs(statusRegs));
 
-assign new_branch_addr = pc_in + { {6{Signed_imm_24[23]}}, Signed_imm_24<<2};
+assign new_branch_addr = pc_in + { {8{Signed_imm_24[23]}}, Signed_imm_24}; // this pc_in is the next_pc
 
 
 endmodule

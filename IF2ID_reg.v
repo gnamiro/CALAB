@@ -12,6 +12,7 @@ module IF2ID_reg(
         else if (~freeze) begin
             if (flush) begin
                 instruction <= 32'b11100000000000000000000000000000;
+                pc_out <= 32'b0;
             end
             else begin
                 instruction <= instruction_in;

@@ -47,7 +47,7 @@ module ID2EXE_reg(
             PC <= PC_IN;
             Val_Rn <= Val_Rn_IN;
             Val_Rm <= Val_Rm_IN;
-            imm <= 0;
+            imm <= imm_IN;
             Shift_operand <= Shift_operand_IN;
             Signed_imm_24 <= Signed_imm_24_IN;
             Dest <= Dest_IN;
@@ -55,11 +55,17 @@ module ID2EXE_reg(
 
             if (flush) begin
                 PC <= 0;
-                B <= 0;
+                {WB_EN, MEM_R_EN, MEM_W_EN, B, S} <= 0;
+                EXE_CMD <= 0;
+                {PC, Val_Rn, Val_Rm} <= 0;
+                imm <= 0;
+                Shift_operand <= 0;
+                Signed_imm_24 <= 0;
+                Dest <= 0;
+                statusRegs_OUT <= 4'b1110;
             end
             else begin
                 PC <= PC_IN;
-                B <= 0;
             end
         end
     end

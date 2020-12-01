@@ -1,17 +1,18 @@
 module ID_Stage (
     input clk, rst,
-    input  WB_EN,
+    input[31:0] WB_Value,
+    input[3:0] WB_Dest,
+    input WB_WB_EN,
     input [31:0] instruction,
     input Freeze,
-    input [3:0] Sr, WB_DES,
-    input [31:0] WB_Value,
+    input [3:0] Sr,
     output flush,
     output [23:0] Signed_imm_24,
     output[11:0] shift_operand,
     output imm,
     output [31:0] Val_Rn, Val_Rm,
     output [8:0] controllerRes,
-    output [3:0] Dest
+    output [3:0] Dest, Src2
 );
 
 wire [3:0] Cond;
@@ -36,11 +37,12 @@ assign src1 = instruction[19:16];
 Controller cu(.Mode(Mode), .Op_Code(Op_Code), .S(S), .controllerRes(_controllerRes));
 ConditionCheck condCheck(.cond(Cond), .Sr(Sr), .condRes(condRes));
 
-// assign notCondRes = ~condRes;
-assign controllerSelector = condRes | Freeze;
+assign notCondRes = ~condRes;
+assign controllerSelector = notCondRes | Freeze;
 
-Mux2 #(9) controllerMux(_controllerRes, 9'b0, controllerSelector, controllerRes);
+Mux2 #(9) controllerMux(9'b0, _controllerRes, controllerSelector, controllerRes);
 Mux2 #(4) src2Mux(instruction[15:12], instruction[3:0], controllerRes[6], src2);
-RegisterFile ut(.clk(clk), .rst(rst), .writeBackEn(writeBackEn), .src1(src1), .src2(src2), .Dest_wb(WB_DES), .Result_WB(WB_Value), .reg1(Val_Rn), .reg2(Val_Rm));
+RegisterFile ut(.clk(clk), .rst(rst), .WB_Value(WB_Value), .WB_Dest(WB_Dest), .WB_EN(WB_WB_EN), .src1(src1), .src2(src2), .reg1(Val_Rn), .reg2(Val_Rm));
 assign flush = 1'b0;
+assign Src2 = src2;
 endmodule

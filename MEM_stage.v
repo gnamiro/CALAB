@@ -8,11 +8,11 @@ module MEM_Stage(
 
 wire [31:0] Address;
 reg [31:0] RAM[0:64512]; //1024 to 2**16
-assign Address = (Val_Rm - 32'd1024) % 64513;
+assign Address = ((ALU_Res  - 32'd1024)>>2) % 32'd64513;
 
 always @ (posedge clk) begin
     if (MEM_W_EN) begin
-        RAM[Address] <= ALU_Res;
+        RAM[Address] <= Val_Rm;
     end
 end
 
