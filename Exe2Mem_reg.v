@@ -1,21 +1,29 @@
-module Exe2Mem_reg(input clk, rst, input [1:0]write_back_signal, memory_signal,
-                    input[31:0]result, Rb, input [4:0]Reg_Dst,
-                    output reg [1:0] Write_back_signal, Memory_signal,
-                    output reg[31:0] Result, RB, output reg[4:0]REG_DST);
-    
-    always@(posedge clk,posedge rst)begin
-        if(rst)begin
-            Write_back_signal <=2'b0;
-            Result <= 32'b0;
-            RB <= 32'b0;
-            REG_DST <= 5'b0;
-            Memory_signal <=2'b0;
+module EXE2MEM_reg(
+  input clk, rst,
+  input WB_EN_IN, MEM_R_EN_IN, MEM_W_EN_IN,
+  input [31:0] ALURes_IN,
+  input [31:0] Val_Rm_IN,
+  input [3:0] Dest_IN,
+  output reg[31:0] ALURes_MEM, Val_Rm_MEM,
+  output reg[3:0] Dest_MEM,
+  output reg MEM_R_EN_MEM, WB_EN_MEM, MEM_W_EN_MEM
+);
+
+    always@(posedge clk, posedge rst) begin
+        if(rst) begin
+            ALURes_MEM <= 32'b0;
+            Val_Rm_MEM <= 32'b0;
+            Dest_MEM <= 5'b0;
+            MEM_R_EN_MEM <=1'b0;
+            WB_EN_MEM <= 1'b0;
+            MEM_W_EN_MEM <= 1'b0;
         end else begin
-            Write_back_signal <=write_back_signal;
-            Result <= result;
-            RB <= Rb;
-            REG_DST <= Reg_Dst;
-            Memory_signal <= memory_signal;
+          ALURes_MEM <= ALURes_IN;
+          Val_Rm_MEM <= Val_Rm_IN;
+          Dest_MEM <= Dest_IN;
+          MEM_R_EN_MEM <=MEM_R_EN_IN;
+          WB_EN_MEM <= WB_EN_IN;
+          MEM_W_EN_MEM <= MEM_W_EN_IN;
         end
     end
 
