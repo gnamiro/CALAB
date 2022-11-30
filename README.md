@@ -1,2 +1,4 @@
 # CALAB
-Computer Architecture Lab cas
+Computer Architecture Lab
+In this project, we created a MIPS pipeline (Verilog),
+
